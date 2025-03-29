@@ -158,8 +158,5 @@ cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
 df2 = df2.reset_index()
 indices = pd.Series(df2.index, index=df2['title'])
 
-<<<<<<< HEAD
 #get_recommendations('Interstellar', cosine_sim2)
-=======
->>>>>>> ee55faade729aadec36b0bc60547f25f9cd50156
 
