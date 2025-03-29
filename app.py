@@ -21,15 +21,6 @@ def home():
     else:
         return render_template("login.html")
 
-@app.route("/login", methods = ["POST", "GET"])
-def login():
-    if(request.method == "POST"):
-        #can check if request.form["nm"] not blank, do more stuff with it
-        user = request.form["nm"]
-        return redirect(url_for("user", usr = user))
-    else:
-        return render_template("login.html")
-
 @app.route("/<usr>")
 def user(usr):
     recommendations = movie_recommendation.get_recommendations(usr, movie_recommendation.cosine_sim2)
