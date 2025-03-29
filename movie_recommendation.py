@@ -63,16 +63,18 @@ cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 
 #Construct a reverse map of indices and movie titles
 indices = pd.Series(df2.index, index=df2['title']).drop_duplicates()
+#indices = pd.Series(df2.index, index=df2['title'].str.lower()).drop_duplicates()
 
 def get_recommendations(title, cosine_sim=cosine_sim):
+    #title_lower = title.lower()
     #Check if title exists in indices
-    if title not in indices:
+    if title.title() not in indices:
         return [] 
     
     # Get the index of the movie that matches the title
-    idx = indices[title.lower()]
+    idx = indices[title.title()]
 
-    # Get the pairwsie similarity scores of all movies with that movie
+    # Get the pairwise similarity scores of all movies with that movie
     sim_scores = list(enumerate(cosine_sim[idx]))
 
     # Sort the movies based on the similarity scores
@@ -158,5 +160,8 @@ cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
 df2 = df2.reset_index()
 indices = pd.Series(df2.index, index=df2['title'])
 
+<<<<<<< HEAD
 #get_recommendations('Interstellar', cosine_sim2)
+=======
+>>>>>>> ee55faade729aadec36b0bc60547f25f9cd50156
 
