@@ -12,10 +12,14 @@ movie_recommendation.get_recommendations('Interstellar', movie_recommendation.co
 app = Flask(__name__)   
 
 
-@app.route("/")
+@app.route("/", methods = ["POST", "GET"])
 def home():
-
-    return "test"
+    if(request.method == "POST"):
+        #can check if request.form["nm"] not blank, do more stuff with it
+        user = request.form["nm"]
+        return redirect(url_for("user", usr = user))
+    else:
+        return render_template("login.html")
 
 @app.route("/login", methods = ["POST", "GET"])
 def login():
