@@ -6,11 +6,16 @@
     <title>Movie Recommendations</title>
 </head>
 <body>
-    <h1>Recommended Movies</h1>
-    <ul>
-        {% for movie in movies %}
-            <li>{{ movie }}</li>
-        {% endfor %}
+    {% if movies %}
+        <h2>Recommended Movies:</h2>
+        <ul>
+            {% for movie in movies %}
+                <li>{{ movie }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h2>{{ message }}</h2>
+    {% endif %}
     </ul>
 </body>
 </html>
