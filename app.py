@@ -24,8 +24,10 @@ def home():
 @app.route("/<usr>")
 def user(usr):
     recommendations = movie_recommendation.get_recommendations(usr, movie_recommendation.cosine_sim2)
-    return render_template('recommendations.html', movies=recommendations)
-
+    if recommendations:
+        return render_template('recommendations.html', movies=recommendations)
+    else:
+        return render_template('recommendations.html', movies=[], message="NO MOTION!")
 
 if __name__=='__main__':
     app.run(debug = True)
