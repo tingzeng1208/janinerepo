@@ -1,7 +1,12 @@
-
-
 import pandas as pd
 import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+# Import linear_kernel
+from sklearn.metrics.pairwise import linear_kernel
+# Import CountVectorizer and create the count matrix
+from sklearn.feature_extraction.text import CountVectorizer
+# Compute the Cosine Similarity matrix based on the count_matrix
+from sklearn.metrics.pairwise import cosine_similarity
 
 df1=pd.read_csv("resources/tmdb_5000_credits.csv")
 df2=pd.read_csv("resources/tmdb_5000_movies.csv")
@@ -11,7 +16,6 @@ df2= df2.merge(df1,on='id')
 
 
 C= df2['vote_average'].mean()
-
 m= df2['vote_count'].quantile(0.9)
 
 q_movies = df2.copy().loc[df2['vote_count'] >= m]
@@ -43,13 +47,8 @@ plt.title("Popular Movies")
 
 df2['overview'].head(5)
 
-#Import TfIdfVectorizer from scikit-learn
-from sklearn.feature_extraction.text import TfidfVectorizer
-
-#Define a TF-IDF Vectorizer Object. Remove all english stop words such as 'the', 'a'
+#clean
 tfidf = TfidfVectorizer(stop_words='english')
-
-#Replace NaN with an empty string
 df2['overview'] = df2['overview'].fillna('')
 
 #Construct the required TF-IDF matrix by fitting and transforming the data
@@ -58,8 +57,7 @@ tfidf_matrix = tfidf.fit_transform(df2['overview'])
 #Output the shape of tfidf_matrix
 tfidf_matrix.shape
 
-# Import linear_kernel
-from sklearn.metrics.pairwise import linear_kernel
+
 
 # Compute the cosine similarity matrix
 cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
@@ -144,14 +142,12 @@ def create_soup(x):
     return ' '.join(x['keywords']) + ' ' + ' '.join(x['cast']) + ' ' + x['director'] + ' ' + ' '.join(x['genres'])
 df2['soup'] = df2.apply(create_soup, axis=1)
 
-# Import CountVectorizer and create the count matrix
-from sklearn.feature_extraction.text import CountVectorizer
+
 
 count = CountVectorizer(stop_words='english')
 count_matrix = count.fit_transform(df2['soup'])
 
-# Compute the Cosine Similarity matrix based on the count_matrix
-from sklearn.metrics.pairwise import cosine_similarity
+
 
 cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
 
