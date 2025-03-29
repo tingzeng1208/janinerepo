@@ -2,8 +2,10 @@ from flask import Flask, redirect, url_for, request, render_template, flash
 import pandas as pd
 import numpy as np
 
-df1=pd.read_csv("resources/tmdb_5000_credits.csv")
-df2=pd.read_csv("resources/tmdb_5000_movies.csv")
+#import python file
+import movie_recommendation
+
+movie_recommendation.get_recommendations('Interstellar', movie_recommendation.cosine_sim2)
 
 
 # Flask constructor
@@ -12,6 +14,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
+
     return "test"
 
 @app.route("/login", methods = ["POST", "GET"])
@@ -25,8 +28,9 @@ def login():
 
 @app.route("/<usr>")
 def user(usr):
-    
-    return f"<h1>{usr}</h1>"
+    recommendations = movie_recommendation.get_recommendations(usr, movie_recommendation.cosine_sim2)
+    return render_template('recommendations.html', movies=recommendations)
+
 
 if __name__=='__main__':
     app.run(debug = True)
