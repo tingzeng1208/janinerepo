@@ -27,7 +27,7 @@ def user(usr):
     if recommendations:
         return render_template('recommendations.html', movies=recommendations)
     else:
-        return render_template('recommendations.html', movies=[], message="NO MOTION!")
+        return render_template('recommendations.html', movies=[], message="NO MOTION DETECTED")
 
 if __name__=='__main__':
     app.run(debug = True)
