@@ -7,6 +7,7 @@ from sklearn.metrics.pairwise import linear_kernel
 from sklearn.feature_extraction.text import CountVectorizer
 # Compute the Cosine Similarity matrix based on the count_matrix
 from sklearn.metrics.pairwise import cosine_similarity
+import matplotlib.pyplot as plt
 
 df1=pd.read_csv("resources/tmdb_5000_credits.csv")
 df2=pd.read_csv("resources/tmdb_5000_movies.csv")
@@ -32,11 +33,9 @@ q_movies['score'] = q_movies.apply(weighted_rating, axis=1)
 #Sort movies based on score calculated above
 q_movies = q_movies.sort_values('score', ascending=False)
 
-#Print the top 15 movies
-q_movies[['title', 'vote_count', 'vote_average', 'score']].head(10)
 
 pop= df2.sort_values('popularity', ascending=False)
-import matplotlib.pyplot as plt
+
 plt.figure(figsize=(12,4))
 
 plt.barh(pop['title'].head(6),pop['popularity'].head(6), align='center',
@@ -71,7 +70,7 @@ def get_recommendations(title, cosine_sim=cosine_sim):
         return [] 
     
     # Get the index of the movie that matches the title
-    idx = indices[title]
+    idx = indices[title.lower()]
 
     # Get the pairwsie similarity scores of all movies with that movie
     sim_scores = list(enumerate(cosine_sim[idx]))
@@ -159,4 +158,8 @@ cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
 df2 = df2.reset_index()
 indices = pd.Series(df2.index, index=df2['title'])
 
+<<<<<<< HEAD
+#get_recommendations('Interstellar', cosine_sim2)
+=======
+>>>>>>> ee55faade729aadec36b0bc60547f25f9cd50156
 
