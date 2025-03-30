@@ -1,18 +1,27 @@
 import React, { useState } from 'react'
 import useRecommendationStore from '../stores/UseRecommendationStore'
 
-const Recommendation = () => {
+const Recommendation  = () => {
   const [title, setTitle] = useState('')
-  const { recommendations, fetchRecommendations, loading, error } = useRecommendationStore()
+  const {
+    movieRecommendations,
+    songRecommendations,
+    message,
+    loading,
+    error,
+    fetchRecommendations
+  } = useRecommendationStore()
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetchRecommendations(title)
+    if (title.trim()) {
+      fetchRecommendations(title)
+    }
   }
 
   return (
     <div style={{ padding: '2rem' }}>
-      <h1>Movie Recommender</h1>
+      <h1>🎬 Movie & 🎵 Song Recommender</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -25,12 +34,23 @@ const Recommendation = () => {
 
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      {message && <p><strong>{message}</strong></p>}
 
-      <ul>
-        {recommendations.map((movie, index) => (
-          <li key={index}>{movie}</li>
-        ))}
-      </ul>
+      <div style={{ marginTop: '2rem' }}>
+        <h2>🎬 Movie Recommendations</h2>
+        <ul>
+          {movieRecommendations.map((movie, idx) => (
+            <li key={idx}>{movie}</li>
+          ))}
+        </ul>
+
+        <h2>🎵 Song Recommendations</h2>
+        <ul>
+          {songRecommendations.map((song, idx) => (
+            <li key={idx}>{song}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }

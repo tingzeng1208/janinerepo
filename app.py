@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, request, render_template, flash, request, jsonify
 import pandas as pd
 import numpy as np
+import json
 
 #import python file
 import movie_recommendation
@@ -28,8 +29,25 @@ def recommend():
     if not title:
         return jsonify({"error": "No title provided"}), 400
 
-    result_json = movie_recommendation.get_recommendations_json(title)
-    return result_json  # already JSON
+    # Get movie recommendations as dict
+    movie_result = movie_recommendation.get_recommendations_json(title)
+    if isinstance(movie_result, str):  # convert back from json string
+        movie_result = json.loads(movie_result)
+
+    # Get song recommendations
+    songs_result = spotify_recommendation.get_recommendation_json(title)
+    if isinstance(songs_result, str):  # convert back from json string
+        songs_result = json.loads(songs_result)
+
+    # Combine both into one response
+    full_result = {
+        "input": title,
+        "recommendations": movie_result.get("recommendations", []),
+        "songs": songs_result.get("songs", []),
+        "message": "SUCCESS"
+    }
+
+    return jsonify(full_result)
 
 @app.route("/api/status", methods=["GET"])
 def status():
