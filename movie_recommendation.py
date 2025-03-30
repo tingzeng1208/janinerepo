@@ -27,16 +27,9 @@ indices = pd.Series(df2.index, index=df2['title']).drop_duplicates()
 
 #  return the recommendations in json formats
 def get_recommendations_json(title, cosine_sim=cosine_sim, top_n=5):
-    title = title.title()
-    if title not in indices:
-        return json.dumps({"error": "Movie title not found"})
 
-    idx = indices[title]
-    sim_scores = list(enumerate(cosine_sim[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)[1:top_n + 1]
-    movie_indices = [i[0] for i in sim_scores]
-    recommended_titles = df2['title'].iloc[movie_indices].tolist()
 
+    recommended_titles = get_recommendations(title, cosine_sim2)
     # Build a JSON-friendly dict
     result = {
         "input": title,
@@ -53,6 +46,7 @@ def get_recommendations(title, cosine_sim=cosine_sim):
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True) #sort movies based on score
     sim_scores = sim_scores[1:6]
     movie_indices = [i[0] for i in sim_scores]
+    print(df2['title'].iloc[movie_indices].tolist())
     return df2['title'].iloc[movie_indices].tolist()
 
 

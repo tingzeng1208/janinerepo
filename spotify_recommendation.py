@@ -105,38 +105,7 @@ def reformat(songName):
 import json
 
 def get_recommendation_json(title):
-    songNames = []
-    genres = get_genres_movie(title)
-    keywords = get_keywords_movie(title)
-
-    for i in range(3):
-        playlist_url = search_playlists(title)
-        if playlist_url == "":
-            continue
-        songNames.append(findTracks(get_playlist_id(playlist_url)))
-
-    for genre in genres:
-        playlist_url = search_playlists(genre)
-        if playlist_url == "":
-            continue
-        songNames.append(findTracks(get_playlist_id(playlist_url)))
-
-    for keyword in keywords:
-        playlist_url = search_playlists(keyword)
-        if playlist_url == "":
-            continue
-        songNames.append(findTracks(get_playlist_id(playlist_url)))
-
-    while len(songNames) < 5:
-        playlist_url = search_playlists(title)
-        if playlist_url == "":
-            break
-        songNames.append(findTracks(get_playlist_id(playlist_url)))
-
-    songNames = reformat(songNames)
-    songNames.sort()
-    songNames = songNames[:5]
-
+    songNames = get_recommendation(title)
     # Return as JSON
     if len(songNames) == 0:
         return json.dumps({
@@ -145,10 +114,10 @@ def get_recommendation_json(title):
             "message": "NO MOTION DETECTED"
         }, indent=2)
     else:
-        
         return json.dumps({
             "input": title,
-            "songs": songNames
+            "songs": songNames,
+            "message": "SUCCESS"
         }, indent=2)
 
 
