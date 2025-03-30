@@ -25,7 +25,7 @@ cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 indices = pd.Series(df2.index, index=df2['title']).drop_duplicates()
 
 #  return the recommendations in json formats
-def get_recommendations_json(title, cosine_sim=cosine_sim2, top_n=5):
+def get_recommendations_json(title, cosine_sim=cosine_sim, top_n=5):
     title = title.title()
     if title not in indices:
         return json.dumps({"error": "Movie title not found"})

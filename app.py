@@ -5,6 +5,9 @@ import numpy as np
 #import python file
 import movie_recommendation
 import spotify_recommendation
+from flask_cors import CORS
+
+
 
 #movie_recommendation.get_recommendations('Interstellar', movie_recommendation.cosine_sim2)
 
@@ -12,6 +15,27 @@ import spotify_recommendation
 # Flask constructor
 app = Flask(__name__)   
 
+# must allow CORS for the app to work with front end
+CORS(app)
+
+# new routes to return jason data
+
+@app.route("/api/recommend", methods=["POST"])
+def recommend():
+    data = request.get_json()
+    title = data.get("title", "")
+    
+    if not title:
+        return jsonify({"error": "No title provided"}), 400
+
+    result_json = movie_recommendation.get_recommendations_json(title)
+    return result_json  # already JSON
+
+@app.route("/api/status", methods=["GET"])
+def status():
+    return jsonify({"status": "API is running"})
+
+# end of new routes
 
 @app.route("/", methods = ["POST", "GET"])
 def home():
