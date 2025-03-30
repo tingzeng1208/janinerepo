@@ -4,8 +4,9 @@ import numpy as np
 
 #import python file
 import movie_recommendation
+import spotify_recommendation
 
-movie_recommendation.get_recommendations('Interstellar', movie_recommendation.cosine_sim2)
+#movie_recommendation.get_recommendations('Interstellar', movie_recommendation.cosine_sim2)
 
 
 # Flask constructor
@@ -23,11 +24,15 @@ def home():
 
 @app.route("/<usr>")
 def user(usr):
-    recommendations = movie_recommendation.get_recommendations(usr, movie_recommendation.cosine_sim2)
-    if recommendations:
-        return render_template('recommendations.html', movies=recommendations)
+    MovieRecommendations = movie_recommendation.get_recommendations(usr, movie_recommendation.cosine_sim2)
+    if MovieRecommendations:
+        return render_template('recommendation.html', movies=MovieRecommendations, songs=spotify_recommendation.get_recommendation(usr))
     else:
-        return render_template('recommendations.html', movies=[], message="NO MOTION DETECTED")
+        return render_template('recommendation.html', movies=[], message="NO MOTION DETECTED")
+
+#@app.route("/<usr>/spot")
+#def user(usr):
+    
 
 if __name__=='__main__':
     app.run(debug = True)
