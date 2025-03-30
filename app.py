@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, request, render_template, flash
+from flask import Flask, redirect, url_for, request, render_template, flash, request, jsonify
 import pandas as pd
 import numpy as np
 
